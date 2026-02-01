@@ -1,0 +1,129 @@
+import { useState } from 'react'
+
+const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_ID
+
+function ContactUs() {
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' })
+  const [status, setStatus] = useState('')
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setStatus('')
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!FORMSPREE_ID) {
+      setStatus('error')
+      return
+    }
+    setStatus('sending')
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      if (res.ok) {
+        setFormData({ name: '', email: '', phone: '', message: '' })
+        setStatus('success')
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  return (
+    <>
+      <section className="page-hero">
+        <div className="container">
+          <h1>Contact Us</h1>
+          <p>Get in touch for a consultation</p>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="contact-grid">
+            <div className="contact-info">
+              <h2>Reach Out</h2>
+              <div className="contact-item">
+                <h4>Email</h4>
+                <a href="mailto:contact@lexfortune.in">contact@lexfortune.in</a>
+              </div>
+              <div className="contact-item">
+                <h4>Phone</h4>
+                <div className="contact-phones">
+                  <a href="tel:+919456661555">+91 9456661555</a>
+                  <a href="tel:+919719168574">+91 9719168574</a>
+                  <a href="tel:+917669572735">+91 7669572735</a>
+                </div>
+              </div>
+              <div className="contact-item">
+                <h4>Address</h4>
+                <p>SC-094, Jaipuria Sunrise Plaza, Ahinsa Khand 1, Ghaziabad, UP</p>
+              </div>
+            </div>
+            <div className="contact-form-wrap">
+              <h2>Send a Message</h2>
+              <form onSubmit={handleSubmit} className="contact-form">
+                <div className="form-group">
+                  <label htmlFor="name">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="phone">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="message">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="4"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                  ></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
+                  {status === 'sending' ? 'Sending...' : 'Send Message'}
+                </button>
+                {status === 'success' && <p className="form-success">Thank you. We'll get back to you soon.</p>}
+                {status === 'error' && <p className="form-error">Something went wrong. Please try again or call us.</p>}
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}
+
+export default ContactUs
