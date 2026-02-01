@@ -1,6 +1,16 @@
 # Lexfortune Advisory
 
-Website for lexfortune.in - legal & financial advisory, Ghaziabad.
+Website of lexfortune.in
+
+## Tech
+
+- React 18
+- JavaScript
+- Vite
+- React Router
+- Formspree (contact form)
+- CSS (no framework)
+- Hosted on GoDaddy
 
 ## Run locally
 
@@ -19,6 +29,6 @@ Upload `dist/` contents to hosting. Root = where index.html goes.
 
 ## Config
 
-- **Logo**: Add `logo.png` in `public/` (falls back to logo.svg)
+- **Logo**: `lexfortunelogo.jpeg` in `public/`
 - **Formspree**: Sign up at formspree.io, create form, add `VITE_FORMSPREE_ID` to `.env`
 - **Contact info**: Edit ContactUs.jsx and Footer.jsx
